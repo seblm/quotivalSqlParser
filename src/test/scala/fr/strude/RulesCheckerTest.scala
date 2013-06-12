@@ -25,6 +25,8 @@ class RulesCheckerTest extends FunSuite with ShouldMatchers {
 
         val result = validateDatas(Set(quotivalDatas_withGeneralAndPackageErrors))
         result should have size 1
+        result.head.quotivalData should be(quotivalDatas_withGeneralAndPackageErrors)
+        result.head.errors should have size 2
     }
 
     test("[test after] more complete datas validation") {
