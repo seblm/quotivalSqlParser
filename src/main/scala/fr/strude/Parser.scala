@@ -4,7 +4,7 @@ object Parser {
 
     case class QuotivalData(tableName: String, fields: Map[String, String], primaryKey: Int)
 
-    def extractQuotivalMetadata(filePath: String): List[QuotivalData] = {
+    def extractQuotivaldatas(filePath: String): List[QuotivalData] = {
         val lines = io.Source.fromFile(filePath, "UTF-8").getLines()
         lines.map {
             l =>

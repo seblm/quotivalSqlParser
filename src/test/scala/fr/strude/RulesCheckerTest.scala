@@ -19,6 +19,14 @@ class RulesCheckerTest extends FunSuite with ShouldMatchers {
         validateDatas(Set(badData)) should be (Set(Errors(Set("Le champ offMarketDate ne respecte pas le format 'yyyy-mm-dd hh:mm:ss' (ou NULL)"), badData)))
     }
 
+    test("validate datas, with general & package errors, should return only one error") {
+        val fields = Map("marketStatus" -> "4", "refundingRate" -> "P")
+        val quotivalDatas_withGeneralAndPackageErrors = QuotivalData("package", fields, 12)
+
+        val result = validateDatas(Set(quotivalDatas_withGeneralAndPackageErrors))
+        result should have size 1
+    }
+
     test("[test after] more complete datas validation") {
         val p = QuotivalData("package", Map("marketStatus" -> "5"), 20)
         val q = QuotivalData("package", Map("marketStatus" -> "4"), 21)
