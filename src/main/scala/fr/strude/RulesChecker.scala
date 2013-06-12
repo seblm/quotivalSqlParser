@@ -2,21 +2,20 @@ package fr.strude
 
 import Parser._
 import Rules._
-import annotation.tailrec
 
 object RulesChecker {
 
     sealed trait RulesError
-    case class Errors(errors: Set[String], quotivalData: QuotivalData) extends RulesError
-    case object NoErrors extends RulesError
+    case class Error(errors: Set[String], quotivalData: QuotivalData) extends RulesError
+    case object NoError extends RulesError
 
-    def validateDatas(quotivalDatas: Set[QuotivalData]): Set[Errors] = {
+    def validateDatas(quotivalDatas: Set[QuotivalData]): Set[Error] = {
         val generalFailures = quotivalDatas
                 .map(data => checkRules(data, generalRules))
                 .filter {
-                    case e: Errors => true
+                    case e: Error => true
                     case _ => false
-                }.asInstanceOf[Set[Errors]]
+                }.asInstanceOf[Set[Error]]
 
         val packageFailures = retrieveErrors(quotivalDatas, "package", packageRules)
         val productFailures = retrieveErrors(quotivalDatas, "product", productRules)
@@ -31,27 +30,26 @@ object RulesChecker {
             if ( !ruleRes._1 )
         } yield (ruleRes._2)
 
-        if(quotiFailed.isEmpty) NoErrors else Errors(quotiFailed, quotivalData)
+        if(quotiFailed.isEmpty) NoError else Error(quotiFailed, quotivalData)
     }
 
-    private def retrieveErrors(quotivalDatas: Set[QuotivalData], tableName: String, rules: Rules): Set[Errors] = {
+    private def retrieveErrors(quotivalDatas: Set[QuotivalData], tableName: String, rules: Rules): Set[Error] = {
         (for {
             q <- quotivalDatas
             if (q.tableName == tableName)
 
             rulesErrors = checkRules(q, rules)
             if (rulesErrors match {
-                case e: Errors => true
+                case e: Error => true
                 case _ => false
             })
-        } yield rulesErrors).asInstanceOf[Set[Errors]]
+        } yield rulesErrors).asInstanceOf[Set[Error]]
     }
 
-    private def concatQuotivalErrors(set: Set[Errors]): Set[Errors] = {
-        if (set.isEmpty) Set()
+    private def concatQuotivalErrors(set: Set[Error]): Set[Error] = {
+        if(set.isEmpty) Set()
         else {
             val mergedSet = concatQuotivalErrors(set.tail)
-
             val mayBeError = mergedSet.find( error => error.quotivalData == set.head.quotivalData )
 
             mayBeError match {

@@ -16,7 +16,7 @@ class RulesCheckerTest extends FunSuite with ShouldMatchers {
     }
 
     test("validate datas should return some errors") {
-        validateDatas(Set(badData)) should be (Set(Errors(Set("Le champ offMarketDate ne respecte pas le format 'yyyy-mm-dd hh:mm:ss' (ou NULL)"), badData)))
+        validateDatas(Set(badData)) should be (Set(Error(Set("Le champ offMarketDate ne respecte pas le format 'yyyy-mm-dd hh:mm:ss' (ou NULL)"), badData)))
     }
 
     test("validate datas, with general & package errors, should return only one error") {
