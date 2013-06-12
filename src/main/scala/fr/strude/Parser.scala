@@ -4,14 +4,14 @@ object Parser {
 
     case class QuotivalData(tableName: String, fields: Map[String, String], primaryKey: Int)
 
-    def extractQuotivaldatas(filePath: String): List[QuotivalData] = {
+    def extractQuotivaldatas(filePath: String): Set[QuotivalData] = {
         val lines = io.Source.fromFile(filePath, "UTF-8").getLines()
         lines.map {
             l =>
                 val splitSet = l.split(" SET ")
                 val splitWhere = splitSet(1).split(" WHERE ")
                 QuotivalData(splitSet(0).split("UPDATE ")(1).trim, extractQuotivalFieldsData(splitWhere(0).trim), retrieveId(splitWhere(1).trim))
-        }.toList
+        }.toSet
     }
 
     private def retrieveId(splitWhere: String): Int = {
