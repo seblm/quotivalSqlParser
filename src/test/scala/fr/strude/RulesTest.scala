@@ -170,7 +170,7 @@ class RulesTest extends FunSuite with ShouldMatchers {
         packageRules.map(rule => rule(q.fields)._1).filter(_ == false) should have size 1
         packageRules.map(rule => rule(r.fields)._1).filter(_ == false) should have size 1
         packageRules.map(rule => rule(s.fields)._1).filter(_ == false) should have size 1
-        packageRules.map(rule => rule(t.fields)._1).filter(_ == false) should have size 1
+        packageRules.map(rule => rule(t.fields)._1).filter(_ == false) should have size 0
     }
 
     test("si le refundingBase et le vat changent, le vat ne peut pas être NULL") {
