@@ -41,8 +41,9 @@ object Rules {
             ("PII", "prothèse interne inerte"), ("PMH", "préparation magistrale homéopathique"), ("NULL", "NULL")).contains((f("actCode"), f("actCodeName")))
         else true, "Les champ actCode et actCodeName sont mal formatés (soit incohérents soit avec de mauvaises valeurs)"),
         // vatRate
-        f => (if (f.contains("vatRate")) List("2.10", "7.00", "5.50", "19.60").contains(f("vatRate")) else true, "Le vat n'a pas les bonnes valeurs"),
-        f => (if (f.contains("vatRate") && f.contains("refundingBase")) f("vatRate") != "NULL" else true, "Le vat ne peut pas prendre la valeur NULL si il y a un refundingBase.")
+        f => (if (f.contains("vatRate")) List("2.10", "7.00", "5.50", "19.60", "NULL").contains(f("vatRate")) else true, "Le vat n'a pas les bonnes valeurs"),
+        f => (if (f.contains("vatRate") && f("vatRate") == "NULL" && f.contains("refundingBase")) f("refundingBase") == "NULL" else true, "Le vat ne peut pas prendre la valeur NULL si il y a un refundingBase non nul."),
+        f => (if (f.contains("vatRate") && f("vatRate") == "NULL") f.contains("publicPrice") && f("publicPrice") == "NULL" else true, "Le vatRate ne peut pas prendre la valeur NULL si le publicPrice ne passe pas à NULL aussi")
     )
 
     val productRules: Rules = Set(

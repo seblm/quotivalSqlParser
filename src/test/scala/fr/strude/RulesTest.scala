@@ -164,7 +164,7 @@ class RulesTest extends FunSuite with ShouldMatchers {
         val q = QuotivalData("package", Map("vatRate" -> "1.45"), 131)
         val r = QuotivalData("package", Map("vatRate" -> "ab"), 132)
         val s = QuotivalData("package", Map("vatRate" -> "2,10"), 133)
-        val t = QuotivalData("package", Map("vatRate" -> "NULL"), 134)
+        val t = QuotivalData("package", Map("vatRate" -> "NULL", "publicPrice" -> "NULL"), 134)
 
         packageRules.map(rule => rule(p.fields)._1).filter(_ == false) should have size 0
         packageRules.map(rule => rule(q.fields)._1).filter(_ == false) should have size 1
@@ -176,7 +176,19 @@ class RulesTest extends FunSuite with ShouldMatchers {
     test("si le refundingBase et le vat changent, le vat ne peut pas être NULL") {
         val p = QuotivalData("package", Map("refundingBase" -> "1.60", "vatRate" -> "2.10"), 140)
         val q = QuotivalData("package", Map("refundingBase" -> "1.60", "vatRate" -> "5.50"), 141)
-        val r = QuotivalData("package", Map("refundingBase" -> "1.60", "vatRate" -> "NULL"), 142)
+        val r = QuotivalData("package", Map("refundingBase" -> "1.60", "vatRate" -> "NULL", "publicPrice" -> "NULL"), 142)
+        val s = QuotivalData("package", Map("refundingBase" -> "NULL", "vatRate" -> "NULL", "publicPrice" -> "NULL"), 142)
+
+        packageRules.map(rule => rule(p.fields)._1).filter(_ == false) should have size 0
+        packageRules.map(rule => rule(q.fields)._1).filter(_ == false) should have size 0
+        packageRules.map(rule => rule(r.fields)._1).filter(_ == false) should have size 1
+        packageRules.map(rule => rule(s.fields)._1).filter(_ == false) should have size 0
+    }
+
+    test("si le vatRate est modifé à 'NULL', le publicPrice doit l'être aussi") {
+        val p = QuotivalData("package", Map("vatRate" -> "2.10"), 150)
+        val q = QuotivalData("package", Map("publicPrice" -> "NULL", "vatRate" -> "NULL"), 141)
+        val r = QuotivalData("package", Map("publicPrice" -> "1.60", "vatRate" -> "NULL"), 142)
 
         packageRules.map(rule => rule(p.fields)._1).filter(_ == false) should have size 0
         packageRules.map(rule => rule(q.fields)._1).filter(_ == false) should have size 0
