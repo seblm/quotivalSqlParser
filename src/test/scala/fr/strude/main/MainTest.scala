@@ -6,7 +6,7 @@ import java.util.Calendar
 import fr.strude.{RulesChecker, Parser}
 import fr.strude.Parser.QuotivalData
 
-class Main extends FunSuite with ShouldMatchers {
+class MainTest extends FunSuite with ShouldMatchers {
 
     val now = Calendar.getInstance().getTime
     val testName = s"parsing quotival datas - date : ${now}"
@@ -16,8 +16,9 @@ class Main extends FunSuite with ShouldMatchers {
 
         val result = RulesChecker.validateDatas(quotivaldatas)
 
-        result should have size 0
+        if(!result.isEmpty) fail(s"Il y a ${result.size} erreurs" )
+        //result should be ('empty)
 
-        result.foreach( error => println(s"${error.quotivalData} : ${error.errors}"))
+        //result.foreach( error => println(s"${error.quotivalData} : ${error.errors}"))
     }
 }
