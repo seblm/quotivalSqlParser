@@ -6,7 +6,7 @@ import java.util.Calendar
 import fr.strude.{RulesChecker, Parser}
 import fr.strude.Parser.QuotivalData
 
-class MainTest extends FunSuite with ShouldMatchers {
+class Main extends FunSuite with ShouldMatchers {
 
     val now = Calendar.getInstance().getTime
     val testName = s"parsing quotival datas - date : ${now}"
