@@ -187,11 +187,13 @@ class RulesTest extends FunSuite with ShouldMatchers {
 
     test("si le vatRate est modifé à 'NULL', le publicPrice doit l'être aussi") {
         val p = QuotivalData("package", Map("vatRate" -> "2.10"), 150)
-        val q = QuotivalData("package", Map("publicPrice" -> "NULL", "vatRate" -> "NULL"), 141)
-        val r = QuotivalData("package", Map("publicPrice" -> "1.60", "vatRate" -> "NULL"), 142)
+        val q = QuotivalData("package", Map("publicPrice" -> "NULL", "vatRate" -> "NULL"), 151)
+        val r = QuotivalData("package", Map("publicPrice" -> "1.60", "vatRate" -> "NULL"), 152)
+        val s = QuotivalData("package", Map("vatRate" -> "NULL"), 153)
 
         packageRules.map(rule => rule(p.fields)._1).filter(_ == false) should have size 0
         packageRules.map(rule => rule(q.fields)._1).filter(_ == false) should have size 0
         packageRules.map(rule => rule(r.fields)._1).filter(_ == false) should have size 1
+        packageRules.map(rule => rule(s.fields)._1).filter(_ == false) should have size 1
     }
 }

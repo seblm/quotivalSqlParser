@@ -16,7 +16,10 @@ class Main extends FunSuite with ShouldMatchers {
 
         val result = RulesChecker.validateDatas(quotivaldatas)
 
-        //result.foreach( error => println(s"${error.quotivalData.tableName}- ${error.quotivalData.primaryKey} : ${error.errors}\n"))
+        //result.foreach( error => println(s"${error.quotivalData.tableName} - ${error.quotivalData.primaryKey} : ${error.errors}"))
+        val errors = result.map(r => r.errors).toSet
+        errors foreach(e => println(e))
+
         if(!result.isEmpty) fail(s"Il y a ${result.size} erreurs" )
         //result should be ('empty)
 

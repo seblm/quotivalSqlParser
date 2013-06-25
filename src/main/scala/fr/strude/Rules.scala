@@ -10,7 +10,7 @@ object Rules {
         f => (!(f.contains("marketStatus") && """^[012345]$""".r.findFirstIn(f("marketStatus")) == None), "Le champ marketStatus n'est pas formaté convenablement (1 chiffe)"),
         f => (if (f.contains("marketStatus") && (f("marketStatus") == "4" || f("marketStatus") == "5")) f.contains("offMarketDate") else true, "marketStatus 4 ou 5 doit être accompagné d'un offMarketDate"),
         f => (if (f.contains("marketStatus") && (f("marketStatus") == "0" || f("marketStatus") == "3")) !f.contains("offMarketDate") || f("offMarketDate") == "NULL" else true, "marketStatus 0 ou 3 ne peut pas avoir de offMarketDate"),
-        f => (if (f.contains("marketStatus") && (f("marketStatus") == "1" || f("marketStatus") == "4" || f("marketStatus") == "2" || f("marketStatus") == "5")) !f.contains("onMarketDate") else true, "marketStatus 1, 4, 2 ou 5 ne peut pas avoir de onMarketDate"),
+        //f => (if (f.contains("marketStatus") && (f("marketStatus") == "1" || f("marketStatus") == "4" || f("marketStatus") == "2" || f("marketStatus") == "5")) !f.contains("onMarketDate") else true, "marketStatus 1, 4, 2 ou 5 ne peut pas avoir de onMarketDate"),
         // offMarketDate
         f => (if (f.contains("offMarketDate") && """(^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})$""".r.findFirstIn(f("offMarketDate")) == None) f("offMarketDate") == "NULL" else true, "Le champ offMarketDate ne respecte pas le format 'yyyy-mm-dd hh:mm:ss' (ou NULL)"),
         // onMarketDate

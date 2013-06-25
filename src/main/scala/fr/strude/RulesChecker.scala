@@ -17,8 +17,8 @@ object RulesChecker {
                     case _ => false
                 }.asInstanceOf[Set[Error]]
 
-        val packageFailures = retrieveErrors(quotivalDatas, "package", packageRules)
-        val productFailures = retrieveErrors(quotivalDatas, "product", productRules)
+        val packageFailures = retrieveErrors(quotivalDatas, "Package", packageRules)
+        val productFailures = retrieveErrors(quotivalDatas, "Product", productRules)
 
         concatQuotivalErrors(generalFailures ++ packageFailures ++ productFailures)
     }
