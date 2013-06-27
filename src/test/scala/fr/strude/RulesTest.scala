@@ -17,14 +17,14 @@ class RulesTest extends FunSuite with ShouldMatchers {
         generalRules.map(rule => rule(q.fields)._1).filter(_ == false) should be(Set())
     }
 
-    test("Verifies that a marketStatus cannot have 4 or 5 where there is not offMarketDate") {
-        val p = QuotivalData("package", Map("marketStatus" -> "5"), 20)
+    test("Verifies that a marketStatus cannot have 4 or 5 where offMarketDate is NULL") {
+        val p = QuotivalData("package", Map("marketStatus" -> "5", "offMarketDate" -> "NULL"), 20)
         val q = QuotivalData("package", Map("marketStatus" -> "4"), 21)
         val r = QuotivalData("product", Map("marketStatus" -> "1"), 22)
         val s = QuotivalData("product", Map("marketStatus" -> "4", "offMarketDate" -> "2013-05-29 00:00:00"), 23)
 
         generalRules.map(rule => rule(p.fields)._1).filter(_ == false) should have size 1
-        generalRules.map(rule => rule(q.fields)._1).filter(_ == false) should have size 1
+        generalRules.map(rule => rule(q.fields)._1).filter(_ == false) should have size 0
         generalRules.map(rule => rule(r.fields)._1).filter(_ == false) should have size 0
         generalRules.map(rule => rule(s.fields)._1).filter(_ == false) should have size 0
     }
@@ -91,13 +91,13 @@ class RulesTest extends FunSuite with ShouldMatchers {
         packageRules.map(rule => rule(s.fields)._1).filter(_ == false) should have size 0
     }
 
-    test("Verifie que si le refundingRate passe à 'N', le refundingBase passe à 'NULL'") {
+    test("Verifie que si le refundingRate passe à 'N', le refundingBase ne peut pas prendre d'autre valeur que NULL") {
         val p = QuotivalData("package", Map("refundingRate" -> "N"), 80)
         val q = QuotivalData("package", Map("refundingRate" -> "T"), 81)
         val r = QuotivalData("package", Map("refundingRate" -> "N", "refundingBase" -> "NULL"), 82)
         val s = QuotivalData("package", Map("refundingRate" -> "N", "refundingBase" -> "1"), 83)
 
-        packageRules.map(rule => rule(p.fields)._1).filter(_ == false) should have size 1
+        packageRules.map(rule => rule(p.fields)._1).filter(_ == false) should have size 0
         packageRules.map(rule => rule(q.fields)._1).filter(_ == false) should have size 0
         packageRules.map(rule => rule(r.fields)._1).filter(_ == false) should have size 0
         packageRules.map(rule => rule(s.fields)._1).filter(_ == false) should have size 1
@@ -185,7 +185,7 @@ class RulesTest extends FunSuite with ShouldMatchers {
         packageRules.map(rule => rule(s.fields)._1).filter(_ == false) should have size 0
     }
 
-    test("si le vatRate est modifé à 'NULL', le publicPrice doit l'être aussi") {
+    test("si le vatRate est modifé à 'NULL', le publicPrice ne peut pas prendre de valeur") {
         val p = QuotivalData("package", Map("vatRate" -> "2.10"), 150)
         val q = QuotivalData("package", Map("publicPrice" -> "NULL", "vatRate" -> "NULL"), 151)
         val r = QuotivalData("package", Map("publicPrice" -> "1.60", "vatRate" -> "NULL"), 152)
@@ -194,6 +194,6 @@ class RulesTest extends FunSuite with ShouldMatchers {
         packageRules.map(rule => rule(p.fields)._1).filter(_ == false) should have size 0
         packageRules.map(rule => rule(q.fields)._1).filter(_ == false) should have size 0
         packageRules.map(rule => rule(r.fields)._1).filter(_ == false) should have size 1
-        packageRules.map(rule => rule(s.fields)._1).filter(_ == false) should have size 1
+        packageRules.map(rule => rule(s.fields)._1).filter(_ == false) should have size 0
     }
 }
