@@ -20,7 +20,7 @@ class RulesCheckerTest extends FunSuite with ShouldMatchers {
     }
 
     test("validate datas, with general & package errors, should return only one error") {
-        val fields = Map("marketStatus" -> "4", "refundingRate" -> "P")
+        val fields = Map("marketStatus" -> "4", "refundingRate" -> "P", "offMarketDate" -> "NULL")
         val quotivalDatas_withGeneralAndPackageErrors = QuotivalData("Package", fields, 12)
 
         val result = validateDatas(Set(quotivalDatas_withGeneralAndPackageErrors))
@@ -30,8 +30,8 @@ class RulesCheckerTest extends FunSuite with ShouldMatchers {
     }
 
     test("[test after] more complete datas validation") {
-        val p = QuotivalData("Package", Map("marketStatus" -> "5"), 20)
-        val q = QuotivalData("Package", Map("marketStatus" -> "4"), 21)
+        val p = QuotivalData("Package", Map("marketStatus" -> "5", "offMarketDate" -> "NULL"), 20)
+        val q = QuotivalData("Package", Map("marketStatus" -> "4", "offMarketDate" -> "toto"), 21)
         val r = QuotivalData("Product", Map("marketStatus" -> "1"), 22)
         val s = QuotivalData("Product", Map("marketStatus" -> "4", "offMarketDate" -> "2013-05-29 00:00:00"), 23)
 
