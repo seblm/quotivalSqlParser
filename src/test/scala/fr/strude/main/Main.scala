@@ -21,7 +21,6 @@ class Main extends FunSuite with ShouldMatchers {
         //errors foreach(e => println(e))
 
         if(!result.isEmpty) fail(s"Il y a ${result.size} erreurs" )
-        //result should be ('empty)
 
     }
 }
