@@ -4,4 +4,3 @@ target/**
 *.idea
 **/.idea
 project/project
-**/real.sql

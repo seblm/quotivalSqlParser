@@ -12,7 +12,7 @@ class Main extends FunSuite with ShouldMatchers {
     val testName = s"parsing quotival datas - date : ${now}"
 
     test(testName) {
-        val quotivaldatas: Set[QuotivalData] = Parser.extractQuotivaldatas("src/test/resources/real.sql")
+        val quotivaldatas: Set[QuotivalData] = Parser.extractQuotivaldatas("target/MYSQL_patch.sql")
 
         val result = RulesChecker.validateDatas(quotivaldatas)
 
