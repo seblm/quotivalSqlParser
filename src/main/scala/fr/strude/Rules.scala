@@ -42,7 +42,9 @@ object Rules {
         // vatRate
         f => (if (f.contains("vatRate")) List("2.10", "7.00", "5.50", "19.60", "NULL").contains(f("vatRate")) else true, "Le vat n'a pas les bonnes valeurs"),
         f => (if (f.contains("vatRate") && f("vatRate") == "NULL" && f.contains("refundingBase")) f("refundingBase") == "NULL" else true, "Le vat ne peut pas prendre la valeur NULL si il y a un refundingBase non nul"),
-        f => (if (f.contains("vatRate") && f("vatRate") == "NULL" && f.contains("publicPrice")) f("publicPrice") == "NULL" else true, "Le vatRate ne peut pas prendre la valeur NULL si il y a un  publicPrice non nul")
+        f => (if (f.contains("vatRate") && f("vatRate") == "NULL" && f.contains("publicPrice")) f("publicPrice") == "NULL" else true, "Le vatRate ne peut pas prendre la valeur NULL si il y a un  publicPrice non nul"),
+        // tfr
+        f => (if (f.contains("tfr")) """^[01]$""".r.findFirstIn(f("tfr")) == None else true, "Le champ tfr ne peut pas avoir une valeur différente de 0 ou 1.")
     )
 
     val productRules: Rules = Set(
