@@ -1,13 +1,26 @@
 package fr.strude
 
 import fr.strude.Parser._
+import scalaz._
+import Scalaz._
 
-case class Rule(func : QuotivalFields => (Boolean, String),
+case class Rule(func : QuotivalFields => Validation[Void, String],
                 precondition : (QuotivalData => Boolean) = (data: QuotivalData) => true) {
+
+  def this(func : QuotivalFields => (Boolean, String),
+           precondition : (QuotivalData => Boolean) = (data: QuotivalData) => true) = {
+      this((fields : QuotivalFields) => {
+        func(fields) match {
+          case (true, _) => Void.success
+          case (false, message) => message.failure
+        }
+      }, precondition)
+  }
+
 
   def checkPreconditions(data : QuotivalData) : Boolean = precondition(data)
 
-  def validate(data : QuotivalData) : (Boolean, String) = if(checkPreconditions(data)) func (data.fields) else (true, "")
+  def validate(data : QuotivalData) : Validation[Void, String] = if(checkPreconditions(data)) func (data.fields) else Void.success
 
 }
 object Rules {
