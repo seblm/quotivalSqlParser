@@ -2,7 +2,10 @@ package fr.strude
 
 object Parser {
 
-    case class QuotivalData(tableName: String, fields: Map[String, String], primaryKey: Int)
+    type QuotivalFields = Map[String,String]
+
+    case class QuotivalData(tableName: String, fields: QuotivalFields, primaryKey: Int)
+
 
     def extractQuotivaldatas(filePath: String): Set[QuotivalData] = {
         val lines = io.Source.fromFile(filePath, "UTF-8").getLines()
